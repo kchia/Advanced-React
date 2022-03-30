@@ -1,7 +1,13 @@
-import Link from 'next/link';
-import styled from 'styled-components';
-import Nav from './Nav';
+import Link from "next/link";
+import styled from "styled-components";
+import Nav from "./Nav";
 
+// Benefits of styled components:
+// - scope CSS easily to specific component
+// - use variables inside CSS
+// - you can have nested selectors (e.g., a {} below)
+
+// You can stick Logo into its own file for reuse
 const Logo = styled.h1`
   font-size: 4rem;
   margin-left: 2rem;

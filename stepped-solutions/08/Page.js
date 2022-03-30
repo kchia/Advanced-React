@@ -1,7 +1,10 @@
-import PropTypes from 'prop-types';
-import styled, { createGlobalStyle } from 'styled-components';
-import Header from './Header';
+import PropTypes from "prop-types";
+import styled, { createGlobalStyle } from "styled-components";
+import Header from "./Header";
 
+// inject global styles in layout
+// - define global css variables and font families
+// - include resets
 const GlobalStyles = createGlobalStyle`
   @font-face {
     font-family: 'radnika_next';
@@ -52,6 +55,7 @@ const InnerStyles = styled.div`
 export default function Page({ children, cool }) {
   return (
     <div>
+      {/* inject global styles */}
       <GlobalStyles />
       <Header />
       <InnerStyles>{children}</InnerStyles>

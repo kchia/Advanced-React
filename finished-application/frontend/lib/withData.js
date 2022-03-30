@@ -25,13 +25,13 @@ function createClient({ headers, initialState }) {
       createUploadLink({
         uri: process.env.NODE_ENV === 'development' ? endpoint : prodEndpoint,
         fetchOptions: {
-          credentials: 'include',
+          credentials: 'include', // send cookies along with the request
         },
         // pass the headers along from this request. This enables SSR with logged in state
-        headers,
+        headers, // so server knows whether or not user is logged in to avoid weird flicker
       }),
     ]),
-    cache: new InMemoryCache({
+    cache: new InMemoryCache({ // store cache in the browser
       typePolicies: {
         Query: {
           fields: {
@@ -40,8 +40,8 @@ function createClient({ headers, initialState }) {
           },
         },
       },
-    }).restore(initialState || {}),
+    }).restore(initialState || {}), // 
   });
 }
-
-export default withApollo(createClient, { getDataFromTree });
+// getDataFromTree crawl queries and wait for data to be fetched before HTML sent from server to client
+export default withApollo(createClient, { getDataFromTree }); 

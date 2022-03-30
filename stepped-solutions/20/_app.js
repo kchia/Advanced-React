@@ -1,13 +1,13 @@
-import { ApolloProvider } from '@apollo/client';
-import NProgress from 'nprogress';
-import Router from 'next/router';
-import Page from '../components/Page';
-import '../components/styles/nprogress.css';
-import withData from '../lib/withData';
+import { ApolloProvider } from "@apollo/client"; // stick it high up in the tree
+import NProgress from "nprogress";
+import Router from "next/router";
+import Page from "../components/Page";
+import "../components/styles/nprogress.css";
+import withData from "../lib/withData";
 
-Router.events.on('routeChangeStart', () => NProgress.start());
-Router.events.on('routeChangeComplete', () => NProgress.done());
-Router.events.on('routeChangeError', () => NProgress.done());
+Router.events.on("routeChangeStart", () => NProgress.start());
+Router.events.on("routeChangeComplete", () => NProgress.done());
+Router.events.on("routeChangeError", () => NProgress.done());
 
 function MyApp({ Component, pageProps, apollo }) {
   console.log(apollo);
@@ -20,6 +20,7 @@ function MyApp({ Component, pageProps, apollo }) {
   );
 }
 
+// if any of the pages has getInitialProps, then wait for them to complete running it
 MyApp.getInitialProps = async function ({ Component, ctx }) {
   let pageProps = {};
   if (Component.getInitialProps) {
@@ -29,4 +30,4 @@ MyApp.getInitialProps = async function ({ Component, ctx }) {
   return { pageProps };
 };
 
-export default withData(MyApp);
+export default withData(MyApp); // withData will inject apollo client
