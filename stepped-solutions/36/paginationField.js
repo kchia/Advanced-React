@@ -1,5 +1,6 @@
-import { PAGINATION_QUERY } from '../components/Pagination';
+import { PAGINATION_QUERY } from "../components/Pagination";
 
+// read => merge => read
 export default function paginationField() {
   return {
     keyArgs: false, // tells apollo we will take care of everything

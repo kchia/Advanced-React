@@ -1,5 +1,5 @@
-import { useMutation } from '@apollo/client';
-import gql from 'graphql-tag';
+import { useMutation } from "@apollo/client";
+import gql from "graphql-tag";
 
 const DELETE_PRODUCT_MUTATION = gql`
   mutation DELETE_PRODUCT_MUTATION($id: ID!) {
@@ -12,7 +12,8 @@ const DELETE_PRODUCT_MUTATION = gql`
 
 function update(cache, payload) {
   console.log(payload);
-  console.log('running the update function after delete');
+  console.log("running the update function after delete");
+  // instead of refetching from API, just evict the deleted item from the local cache
   cache.evict(cache.identify(payload.data.deleteProduct));
 }
 
@@ -21,7 +22,7 @@ export default function DeleteProduct({ id, children }) {
     DELETE_PRODUCT_MUTATION,
     {
       variables: { id },
-      update,
+      update, // update the cache in useMutation
     }
   );
   return (
@@ -29,9 +30,9 @@ export default function DeleteProduct({ id, children }) {
       type="button"
       disabled={loading}
       onClick={() => {
-        if (confirm('Are you sure you want to delete this item?')) {
+        if (confirm("Are you sure you want to delete this item?")) {
           // go ahead and delete it
-          console.log('DELTEe');
+          console.log("DELTEe");
           deleteProduct().catch((err) => alert(err.message));
         }
       }}
