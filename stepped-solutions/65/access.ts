@@ -1,5 +1,5 @@
-import { permissionsList } from './schemas/fields';
-import { ListAccessArgs } from './types';
+import { permissionsList } from "./schemas/fields";
+import { ListAccessArgs } from "./types";
 // At it's simplest, the access control returns a yes or no value depending on the users session
 
 export function isSignedIn({ session }: ListAccessArgs) {
@@ -15,9 +15,12 @@ const generatedPermissions = Object.fromEntries(
   ])
 );
 
+// Object.fromEntries([["canManage", true]], ["canManage", false])
+
+// permissions check if someone meets a criteria
 export const permissions = {
   ...generatedPermissions,
   isAwesome({ session }: ListAccessArgs): boolean {
-    return session?.data.name.includes('wes');
+    return session?.data.name.includes("wes");
   },
 };

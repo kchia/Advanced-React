@@ -1,11 +1,12 @@
-import { render, screen } from '@testing-library/react';
-import { MockedProvider } from '@apollo/react-testing';
-import Nav from '../components/Nav';
-import { CURRENT_USER_QUERY } from '../components/User';
-import { fakeUser, fakeCartItem } from '../lib/testUtils';
-import { CartStateProvider } from '../lib/cartState';
+import { render, screen } from "@testing-library/react";
+import { MockedProvider } from "@apollo/react-testing";
+import Nav from "../components/Nav";
+import { CURRENT_USER_QUERY } from "../components/User";
+import { fakeUser, fakeCartItem } from "../lib/testUtils";
+import { CartStateProvider } from "../lib/cartState";
 
 // Make some Mocks for being logged out, logged in, and loggedin with cart items
+// Have to mock the response for reach GraphQL query
 const notSignedInMocks = [
   {
     request: { query: CURRENT_USER_QUERY },
@@ -33,8 +34,8 @@ const signedInMocksWithCartItems = [
   },
 ];
 
-describe('<Nav/>', () => {
-  it('Renders and minimal nav when signed out', () => {
+describe("<Nav/>", () => {
+  it("Renders and minimal nav when signed out", () => {
     const { container, debug } = render(
       <CartStateProvider>
         <MockedProvider mocks={notSignedInMocks}>
@@ -42,16 +43,16 @@ describe('<Nav/>', () => {
         </MockedProvider>
       </CartStateProvider>
     );
-    expect(container).toHaveTextContent('Sign In');
+    expect(container).toHaveTextContent("Sign In");
     expect(container).toMatchSnapshot();
-    const link = screen.getByText('Sign In');
-    expect(link).toHaveAttribute('href', '/signin');
-    const productsLink = screen.getByText('Products');
+    const link = screen.getByText("Sign In"); //sync
+    expect(link).toHaveAttribute("href", "/signin");
+    const productsLink = screen.getByText("Products");
     expect(productsLink).toBeInTheDocument();
-    expect(productsLink).toHaveAttribute('href', '/products');
+    expect(productsLink).toHaveAttribute("href", "/products");
   });
 
-  it('renders a full nav when signed in', async () => {
+  it("renders a full nav when signed in", async () => {
     const { container, debug } = render(
       <CartStateProvider>
         <MockedProvider mocks={signedInMocks}>
@@ -59,13 +60,13 @@ describe('<Nav/>', () => {
         </MockedProvider>
       </CartStateProvider>
     );
-    await screen.findByText('Account');
-    expect(container).toMatchSnapshot();
-    expect(container).toHaveTextContent('Sign Out');
-    expect(container).toHaveTextContent('My Cart');
+    await screen.findByText("Account"); // wait for Account link to show up
+    expect(container).toMatchSnapshot(); // great way to cover all the content
+    expect(container).toHaveTextContent("Sign Out");
+    expect(container).toHaveTextContent("My Cart");
   });
 
-  it('rendres the amount of items in the cart', async () => {
+  it("rendres the amount of items in the cart", async () => {
     const { container, debug } = render(
       <CartStateProvider>
         <MockedProvider mocks={signedInMocksWithCartItems}>
@@ -73,7 +74,7 @@ describe('<Nav/>', () => {
         </MockedProvider>
       </CartStateProvider>
     );
-    await screen.findByText('Account');
-    expect(screen.getByText('3')).toBeInTheDocument();
+    await screen.findByText("Account");
+    expect(screen.getByText("3")).toBeInTheDocument();
   });
 });

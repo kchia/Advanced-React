@@ -1,22 +1,24 @@
-import { render, screen, waitFor } from '@testing-library/react';
-import { MockedProvider } from '@apollo/react-testing';
-import userEvent from '@testing-library/user-event';
-import Router from 'next/router'; // We will MOCK THIS
-import wait from 'waait';
+import { render, screen, waitFor } from "@testing-library/react";
+import { MockedProvider } from "@apollo/react-testing";
+import userEvent from "@testing-library/user-event";
+import Router from "next/router"; // We will MOCK THIS
+import wait from "waait";
 import CreateProduct, {
   CREATE_PRODUCT_MUTATION,
-} from '../components/CreateProduct';
-import { fakeItem, makePaginationMocksFor } from '../lib/testUtils';
-import { ALL_PRODUCTS_QUERY } from '../components/Products';
+} from "../components/CreateProduct";
+import { fakeItem, makePaginationMocksFor } from "../lib/testUtils";
+import { ALL_PRODUCTS_QUERY } from "../components/Products";
 
 const item = fakeItem();
 
-jest.mock('next/router', () => ({
-  push: jest.fn(),
+// mock the router.push method
+// spy on next/router and replace push with a mock
+jest.mock("next/router", () => ({
+  push: jest.fn(), // Router.push will be mocked
 }));
 
-describe('<CreateProduct/>', () => {
-  it('renders and matches snapshot', () => {
+describe("<CreateProduct/>", () => {
+  it("renders and matches snapshot", () => {
     const { container, debug } = render(
       <MockedProvider>
         <CreateProduct />
@@ -24,7 +26,7 @@ describe('<CreateProduct/>', () => {
     );
     expect(container).toMatchSnapshot();
   });
-  it('handles the updating', async () => {
+  it("handles the updating", async () => {
     // 1. render the form out
     const { container, debug } = render(
       <MockedProvider>
@@ -32,7 +34,7 @@ describe('<CreateProduct/>', () => {
       </MockedProvider>
     );
     // 2. type into the boxes
-    await userEvent.type(screen.getByPlaceholderText(/Name/i), item.name);
+    await userEvent.type(screen.getByPlaceholderText(/Name/i), item.name); // hmmmmm
     await userEvent.type(
       screen.getByPlaceholderText(/Price/i),
       item.price.toString()
@@ -47,7 +49,7 @@ describe('<CreateProduct/>', () => {
     expect(screen.getByDisplayValue(item.description)).toBeInTheDocument();
   });
 
-  it('creates the items when the form is submitted', async () => {
+  it("creates the items when the form is submitted", async () => {
     // create the mocks for this one
     const mocks = [
       {
@@ -56,7 +58,7 @@ describe('<CreateProduct/>', () => {
           variables: {
             name: item.name,
             description: item.description,
-            image: '',
+            image: "",
             price: item.price,
           },
         },
@@ -64,8 +66,8 @@ describe('<CreateProduct/>', () => {
           data: {
             createProduct: {
               ...item, // all fake item fields
-              id: 'abc123',
-              __typename: 'Item',
+              id: "abc123",
+              __typename: "Item",
             },
           },
         },
@@ -101,8 +103,8 @@ describe('<CreateProduct/>', () => {
     );
     // Submit it and see if the page change has been called
     await userEvent.click(screen.getByText(/Add Product/));
-    await waitFor(() => wait(0));
+    await waitFor(() => wait(0)); // wait for the next call stack
     expect(Router.push).toHaveBeenCalled();
-    expect(Router.push).toHaveBeenCalledWith({ pathname: '/product/abc123' });
+    expect(Router.push).toHaveBeenCalledWith({ pathname: "/product/abc123" });
   });
 });

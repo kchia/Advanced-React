@@ -1,9 +1,10 @@
-import { integer, select, text, relationship } from '@keystone-next/fields';
-import { list } from '@keystone-next/keystone/schema';
-import { isSignedIn } from '../access';
+import { integer, select, text, relationship } from "@keystone-next/fields";
+import { list } from "@keystone-next/keystone/schema";
+import { isSignedIn } from "../access";
 
 export const Product = list({
   access: {
+    // access is where you define the permissions for the user signed user
     create: isSignedIn,
     read: isSignedIn,
     update: isSignedIn,
@@ -13,28 +14,28 @@ export const Product = list({
     name: text({ isRequired: true }),
     description: text({
       ui: {
-        displayMode: 'textarea',
+        displayMode: "textarea",
       },
     }),
     photo: relationship({
-      ref: 'ProductImage.product',
+      ref: "ProductImage.product",
       ui: {
-        displayMode: 'cards',
-        cardFields: ['image', 'altText'],
-        inlineCreate: { fields: ['image', 'altText'] },
-        inlineEdit: { fields: ['image', 'altText'] },
+        displayMode: "cards",
+        cardFields: ["image", "altText"],
+        inlineCreate: { fields: ["image", "altText"] },
+        inlineEdit: { fields: ["image", "altText"] },
       },
     }),
     status: select({
       options: [
-        { label: 'Draft', value: 'DRAFT' },
-        { label: 'Available', value: 'AVAILABLE' },
-        { label: 'Unavailable', value: 'UNAVAILABLE' },
+        { label: "Draft", value: "DRAFT" },
+        { label: "Available", value: "AVAILABLE" },
+        { label: "Unavailable", value: "UNAVAILABLE" },
       ],
-      defaultValue: 'DRAFT',
+      defaultValue: "DRAFT",
       ui: {
-        displayMode: 'segmented-control',
-        createView: { fieldMode: 'hidden' },
+        displayMode: "segmented-control",
+        createView: { fieldMode: "hidden" },
       },
     }),
     price: integer(),

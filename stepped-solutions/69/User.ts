@@ -1,12 +1,12 @@
-import { list } from '@keystone-next/keystone/schema';
-import { text, password, relationship } from '@keystone-next/fields';
-import { permissions, rules } from '../access';
+import { list } from "@keystone-next/keystone/schema";
+import { text, password, relationship } from "@keystone-next/fields";
+import { permissions, rules } from "../access";
 
 export const User = list({
   access: {
-    create: () => true,
-    read: rules.canManageUsers,
-    update: rules.canManageUsers,
+    create: () => true, // User should be able to sign up
+    read: rules.canManageUsers, // only manage yourself or if you're admin
+    update: rules.canManageUsers, // only manage yourself or if you're admin
     // only people with the permission can delete themselves!
     // You can't delete yourself
     delete: permissions.canManageUsers,
@@ -21,24 +21,25 @@ export const User = list({
     email: text({ isRequired: true, isUnique: true }),
     password: password(),
     cart: relationship({
-      ref: 'CartItem.user',
+      ref: "CartItem.user",
       many: true,
       ui: {
-        createView: { fieldMode: 'hidden' },
-        itemView: { fieldMode: 'read' },
+        createView: { fieldMode: "hidden" },
+        itemView: { fieldMode: "read" },
       },
     }),
-    orders: relationship({ ref: 'Order.user', many: true }),
+    orders: relationship({ ref: "Order.user", many: true }),
     role: relationship({
-      ref: 'Role.assignedTo',
+      ref: "Role.assignedTo",
       access: {
+        // you can put access control on specific fields
         create: permissions.canManageUsers,
         update: permissions.canManageUsers,
       },
     }),
     products: relationship({
-      ref: 'Product.user',
-      many: true,
+      ref: "Product.user",
+      many: true, // one user can have many products
     }),
   },
 });

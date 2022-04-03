@@ -1,5 +1,5 @@
-import { permissionsList } from './schemas/fields';
-import { ListAccessArgs } from './types';
+import { permissionsList } from "./schemas/fields";
+import { ListAccessArgs } from "./types";
 // At it's simplest, the access control returns a yes or no value depending on the users session
 
 export function isSignedIn({ session }: ListAccessArgs) {
@@ -19,7 +19,7 @@ const generatedPermissions = Object.fromEntries(
 export const permissions = {
   ...generatedPermissions,
   isAwesome({ session }: ListAccessArgs): boolean {
-    return session?.data.name.includes('wes');
+    return session?.data.name.includes("wes");
   },
 };
 
@@ -28,7 +28,7 @@ export const permissions = {
 export const rules = {
   canManageProducts({ session }: ListAccessArgs) {
     if (!isSignedIn({ session })) {
-      return false;
+      return false; // return false to trigger more helpful API error
     }
     // 1. Do they have the permission of canManageProducts
     if (permissions.canManageProducts({ session })) {
@@ -39,7 +39,7 @@ export const rules = {
   },
   canOrder({ session }: ListAccessArgs) {
     if (!isSignedIn({ session })) {
-      return false;
+      return false; // return false to trigger more helpful API error
     }
     // 1. Do they have the permission of canManageProducts
     if (permissions.canManageCart({ session })) {
@@ -50,7 +50,7 @@ export const rules = {
   },
   canManageOrderItems({ session }: ListAccessArgs) {
     if (!isSignedIn({ session })) {
-      return false;
+      return false; // return false to trigger more helpful API error
     }
     // 1. Do they have the permission of canManageProducts
     if (permissions.canManageCart({ session })) {
@@ -61,17 +61,17 @@ export const rules = {
   },
   canReadProducts({ session }: ListAccessArgs) {
     if (!isSignedIn({ session })) {
-      return false;
+      return false; // return false to trigger more helpful API error
     }
     if (permissions.canManageProducts({ session })) {
       return true; // They can read everything!
     }
     // They should only see available products (based on the status field)
-    return { status: 'AVAILABLE' };
+    return { status: "AVAILABLE" };
   },
   canManageUsers({ session }: ListAccessArgs) {
     if (!isSignedIn({ session })) {
-      return false;
+      return false; // return false to trigger more helpful API error
     }
     if (permissions.canManageUsers({ session })) {
       return true;
